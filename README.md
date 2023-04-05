@@ -1,1 +1,1 @@
-# goexpert-client-server-api-lab
+# Client-Server-API Lab - Go Expert
