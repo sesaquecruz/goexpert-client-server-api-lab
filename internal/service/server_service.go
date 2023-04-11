@@ -12,18 +12,27 @@ import (
 type ServerService struct {
 	quoteRepository *repository.QuoteRepository
 	quoteService    *QuoteService
+	ApiTimeout      time.Duration
+	DbTimeout       time.Duration
 }
 
-func NewServerService(qr *repository.QuoteRepository, qs *QuoteService) *ServerService {
+func NewServerService(
+	qr *repository.QuoteRepository,
+	qs *QuoteService,
+	apiTimeout time.Duration,
+	dbTimeout time.Duration,
+) *ServerService {
 	return &ServerService{
 		quoteRepository: qr,
 		quoteService:    qs,
+		ApiTimeout:      apiTimeout,
+		DbTimeout:       dbTimeout,
 	}
 }
 
 func (s *ServerService) UsdBrlHandler(w http.ResponseWriter, r *http.Request) {
 	// Get quote from API
-	ctx, cancel := context.WithTimeout(r.Context(), 200*time.Millisecond)
+	ctx, cancel := context.WithTimeout(r.Context(), s.ApiTimeout)
 	defer cancel()
 
 	quote, err := s.quoteService.GetQuote(ctx, "USD-BRL")
@@ -33,7 +42,7 @@ func (s *ServerService) UsdBrlHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Save quote on DB
-	ctx, cancel = context.WithTimeout(r.Context(), 10*time.Millisecond)
+	ctx, cancel = context.WithTimeout(r.Context(), s.DbTimeout)
 	defer cancel()
 	err = s.quoteRepository.SaveQuote(ctx, quote)
 	if err != nil {
