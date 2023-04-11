@@ -1,0 +1,9 @@
+version: '3.9'
+
+services:
+  lab-app:
+    container_name: lab-app
+    image: lab-app
+    build: .
+    ports:
+      - "8080:8080"
