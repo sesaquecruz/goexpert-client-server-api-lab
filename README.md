@@ -6,8 +6,7 @@ This project contains a simple client-server service to get the USD-BRL exchange
 
 To use this application, you will need:
 
-- Go version 1.18 or higher installed on your computer
-- SQLite3
+- Docker
 - A stable internet connection
 
 ## Installation
@@ -26,38 +25,44 @@ git clone https://github.com/sesaquecruz/goexpert-client-server-api-lab
 cd goexpert-client-server-api-lab
 ```
 
-3. Install the required packages:
+3. Run the docker compose:
 
 ```
-go mod download
+docker compose up --build
 ```
 
 ## Usage
 
-See Makefile.
+### Server
 
-1. Create the DB file by executing:
-
-```
-make up-db
-```
-
-2. Run the server by executing:
+1. In the project directory, enter the *lab-app* container.
 
 ```
-make up-server
+docker compose exec lab-app bash
 ```
 
+2. Inside the container, run the server:
+
+```
+./build/server
+```
 - The server runs on port 8080 and exposes a single endpoint at /cotacao.
 - The request timeout to the server calls the external API is 200ms.
 - The timeout to server saves the result in a database is 10ms.
 - If a timeout is reached, an error status is returned to the client.
 
-3. Run the client by executing:
+### Client
 
+1. In the project directory, enter the *lab-app* container.
 
 ```
-make up-client
+docker compose exec lab-app bash
+```
+
+2. Inside the container, run the client:
+
+```
+./build/client
 ```
 
 - The client makes a request to the server at the /cotacao endpoint within a request timeout of 300ms. 
@@ -66,7 +71,11 @@ make up-client
 
 ## Troubleshooting
 
-The timeouts used can be very small depending on the internet connection. Consider changing them if necessary.
+- The timeouts used can be very small depending on the internet connection. Consider changing them if necessary.
+
+- If the client receives the status 503, consider increasing the timeout on the server to call the external API.
+
+- If the client receives status 500 see [here](https://github.com/mattn/go-sqlite3/issues/855) for more information.
 
 ## License
 
