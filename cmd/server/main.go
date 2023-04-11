@@ -11,12 +11,8 @@ import (
 	"github.com/sesaquecruz/goexpert-client-server-api-lab/internal/service"
 )
 
-// PLEASE CHANGE HERE
-//
-// In the tests, the call to external API fails to respond in 200ms.
-// Then, it was increased to 1000ms to works.
 const (
-	ExternalApiTimeout = 1000 * time.Millisecond
+	ExternalApiTimeout = 200 * time.Millisecond
 	DBTimeout          = 10 * time.Millisecond
 )
 

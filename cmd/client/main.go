@@ -11,13 +11,7 @@ import (
 	"time"
 )
 
-// PLEASE CHANGE HERE
-//
-// In the tests on the server side, the call to external API fails to respond in 200ms.
-// So, there it was increased to 1000ms to works.
-//
-// Then, here the request timeout had to be increased from 300ms to 1100ms.
-const RequestTimeout = 1100 * time.Millisecond
+const RequestTimeout = 300 * time.Millisecond
 
 type Quote struct {
 	Bid float64 `json:"bid,string"`
